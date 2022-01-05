@@ -18,7 +18,7 @@ const Home = (props) => {
     // Fetching data
     useEffect(() => {
         setIsLoading(true);
-        fetch("http://localhost:8080/seller/2", {
+        fetch(api_golang_read_game_by_id + id, {
             method: 'GET'
         })
         .then(resp => resp.json())

@@ -1,17 +1,40 @@
 // Import from react
 import React from 'react';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 import { SearchIcon } from '@heroicons/react/solid';
+import { useForm } from 'react-hook-form';
 
 const NavBar = (props) => {
+    // Data
+    const { register, handleSubmit } = useForm();
+    const router = useRouter();
+
+    // Search function
+    const searchHandler = (data) => {
+        router.push({
+            pathname: '/seller/search-game/' + data.keySearch,
+            query: {
+                id: router.query.id,
+                username: router.query.username,
+                password: router.query.password,
+                image_url: router.query.image_url,
+                type_user: router.query.type_user,
+                keySearch: data.keySearch
+            }
+        })
+    };
+
     // Render Template
     const TemplateRendering = () => {
         return (
             <div className="flex h-14 bg-gray-100 border-b-2 border-gray-200">
                 {/* Search */}
                 <div className="w-5/6 h-14">
-                    <form className="flex justify-center mt-2">
+                    <form onSubmit={handleSubmit(searchHandler)} className="flex justify-center mt-2">
                         <input 
+                            {...register('keySearch')}
+                            name="keySearch"
                             className="w-2/3 outline-none h-9 border-2"
                             placeholder="Search game.."
                         />

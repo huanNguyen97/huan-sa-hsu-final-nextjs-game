@@ -23,7 +23,7 @@ const Seller = () => {
                 {/* Dashboard */}
                 <DashBoard />
                 {/* End Dashboard */}
-
+                
 
                 <div className="flex flex-col w-5/6">
                     {/* Navbar */}

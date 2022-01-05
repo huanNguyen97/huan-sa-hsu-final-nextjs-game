@@ -1,20 +1,19 @@
 // Import from react
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
-import Link from 'next/router';
-import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
 import { useRouter } from 'next/router';
+import { PencilIcon, TrashIcon } from '@heroicons/react/solid';
 
 // Import from owner
-import Card from '../../UI/Card';
-import Loading from '../../UI/Loading';
-import { api_golang_read_game_by_id } from '../../pages/api/url';
+import DashBoard from '../../../../components/userComponent/DashBoard';
+import Navbar from '../../../../components/userComponent/Navbar';
+import Content from '../../../../components/userComponent/Content';
+import Loading from '../../../../UI/Loading';
+import { api_golang_search_game_by_id_user } from '../../../api/url';
 
-const Content = (props) => {
-    // Data
+const Seller = () => {
+    // Data from query
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-
     const router = useRouter();
 
     const id = router.query.id;
@@ -22,12 +21,13 @@ const Content = (props) => {
     const password = router.query.password;
     const image_url = router.query.image_url;
     const type_user = router.query.type_user;
+    const keySearch = router.query.keySearch;
 
     // Fetching data
     useEffect(() => {
         setIsLoading(true);
-        fetch(api_golang_read_game_by_id + router.query.id, {
-            method: 'GET'
+        fetch(api_golang_search_game_by_id_user + id + "/" + keySearch, {
+            method: 'GET',
         })
         .then(resp => resp.json())
         .then(game => {
@@ -39,28 +39,13 @@ const Content = (props) => {
         })
     }, []);
 
-    // click Detail game
-    const ReadDetails = (id_game) => {
-        router.push({
-            pathname: '/seller/details/[gameID]',
-            query: { 
-                gameID: id_game,
-                id: id,
-                username: username,
-                password: password,
-                image_url: image_url,
-                type_user: type_user,
-            }
-        });
-    };
-
-    // Render Template
+    // Render list
     const TemplateRendering = () => {
         return (
             <div className="flex flex-col h-full bg-gray-200 p-12">
                 {/* Tilte */}
                 <div className="h-12">
-                    <p className="text-3xl">Review game</p>
+                    <p className="text-3xl">Search game with key name {keySearch}</p>
                 </div>
                 {/* End title */}
 
@@ -113,7 +98,7 @@ const Content = (props) => {
                                                                 gameID: item.id
                                                             }
                                                         });
-                                                    }}
+                                                    }}  
                                                     className="flex space-x-1 pt-3 bg-green-500 rounded-b-lg rounded-tr-lg
                                                     hover:bg-green-200">
                                                     <PencilIcon
@@ -189,7 +174,7 @@ const Content = (props) => {
                                                                 gameID: item.id
                                                             }
                                                         });
-                                                    }} 
+                                                    }}      
                                                     className="flex space-x-1 pt-3 bg-green-500 rounded-b-lg rounded-tr-lg
                                                     hover:bg-green-200">
                                                     <PencilIcon
@@ -230,13 +215,34 @@ const Content = (props) => {
                 {/* End list */}
             </div>
         );
-    };
+    }
 
     return (
-        <>
-            { isLoading ? <Loading type="Oval" color="#228B22" height="50" width="50" /> : <TemplateRendering /> }
-        </>
+        <div>
+            <main className="flex h-screen w-screen">
+                {/* Dashboard */}
+                <DashBoard />
+                {/* End Dashboard */}
+                
+
+                <div className="flex flex-col w-5/6">
+                    {/* Navbar */}
+                    <Navbar
+                        id_user={id} 
+                        username={username}
+                        password={password}
+                        image_url={image_url}
+                        type_user={type_user}
+                    />
+                    {/* End Navbar */}
+
+                    {/* Content */}
+                    { isLoading ? <Loading type="Oval" color="#228B22" height="50" width="50" /> : <TemplateRendering /> }
+                    {/* End Content */}
+                </div>
+            </main>
+        </div>
     );
 };
 
-export default Content;
+export default Seller;
