@@ -7,7 +7,7 @@ import {
 } from '@heroicons/react/outline'
 
 // Import from owner
-import { api_python_read_cart_temp } from '../../pages/api/url';
+import { api_python_read_cart_temp, api_python_create_payment } from '../../pages/api/url';
 
 const CartCenter = (props) => {
     // Data fetching
@@ -32,6 +32,48 @@ const CartCenter = (props) => {
         })
     }, [])
 
+    // Create payment
+    const createPayment = () => {
+        fetch(api_python_create_payment + username, {
+            method: 'POST'
+        })
+        .then(resp => resp.json())
+        .then(game => {
+            console.log("OK");
+        })
+        .then(() => {
+            router.push({
+                pathname: '/buyer/',
+                query: {
+                    id: router.query.id,
+                    username: username,
+                    password: router.query.password,
+                    image_url: router.query.image_url,
+                    type_user: router.query.type_user,
+                    success: "Thanks for your buying. Good luck all day!!"
+                }
+            })
+        })
+        .catch(() => {
+            console.log("Server not found");    // For checking. Not alerting on mobile screen
+        })
+    };
+
+    // Delete item cart
+    const removeItemCart = (username, id_game) => {
+        router.push({
+            pathname: '/buyer/shopping-cart/[userID]/[gameID]',
+            query: {
+                id: router.query.id,
+                username: username,
+                password: router.query.password,
+                image_url: router.query.image_url,
+                type_user: router.query.type_user,
+                userID: router.query.id,
+                gameID: id_game
+            }
+        });
+    }
 
     return (
         <div className="flex-grow text-white h-screen 
@@ -105,7 +147,7 @@ const CartCenter = (props) => {
                                 </div>
                                 <div>
                                     <div className="flex justify-center mt-2">
-                                        <button className="bg-red-700 w-1/6 h-8 text-black hover:bg-red-300 hover:text-bold"><p>Delete</p></button>
+                                        <button onClick={() => removeItemCart(username, item.id_item)} className="bg-red-700 w-1/6 h-8 text-black hover:bg-red-300 hover:text-bold"><p>Delete</p></button>
                                     </div>
                                 </div>
                             </div>
@@ -119,7 +161,7 @@ const CartCenter = (props) => {
                     <p>${totalPrice}</p>
                 </div>
                 <div className="flex w-1/3 justify-center bg-fuchsia-500 text-5xl">
-                    <button className="h-full w-full hover:bg-green-300 hover:text-bol">Buy</button>
+                    <button onClick={createPayment} className="h-full w-full hover:bg-green-300 hover:text-bol">Buy</button>
                 </div>
             </div>
         </div>

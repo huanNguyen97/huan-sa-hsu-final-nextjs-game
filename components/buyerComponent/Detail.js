@@ -59,7 +59,6 @@ const Detail = (props) => {
         .catch(() => {
             console.log("Server not found");    // For checking. Not alerting on mobile screen
         })
-
     }
 
     // Render template

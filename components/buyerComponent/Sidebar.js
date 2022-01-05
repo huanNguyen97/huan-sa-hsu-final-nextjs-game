@@ -58,7 +58,20 @@ const Sidebar = (props) => {
                     <ShoppingCartIcon className="h-5 w-5" />
                     <p><strong>Shopping Cart</strong></p>
                 </button>
-                <button className={`flex items-center space-x-2 
+                <button onClick={() => {
+                    router.push({
+                        pathname: "/buyer/payment-history/[userID]",
+                        query: {
+                            id: router.query.id,
+                            username: router.query.username,
+                            password: router.query.password,
+                            image_url: router.query.image_url,
+                            type_user: router.query.type_user,
+                            userID: router.query.id
+                        }
+                    })
+                }}
+                className={`flex items-center space-x-2 
                 hover:text-white ${props.color} w-full h-8 rounded-lg`}>
                     <ChartBarIcon className="h-5 w-5 " />
                     <p><strong>Payment history</strong></p>
